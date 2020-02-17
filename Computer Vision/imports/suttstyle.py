@@ -33,6 +33,22 @@ class StyleImport:
         print(ret)
         
         return fn
+
+    @staticmethod
+    def build_dls():
+
+        path = untar_data(URLs.COCO_SAMPLE)
+
+        dblock = DataBlock(blocks=(ImageBlock, ImageBlock),
+                        get_items=get_image_files,
+                        splitter=RandomSplitter(0.1, seed=42),
+                        item_tfms=[Resize(224)],
+                        batch_tfms=[Normalize.from_stats(*imagenet_stats)])
+
+        dls = dblock.dataloaders(path, bs=4)
+
+        return dls
+
     
     def build_feats(self):
         '''
