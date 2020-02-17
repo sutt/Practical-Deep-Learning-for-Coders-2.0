@@ -34,8 +34,7 @@ class StyleImport:
         
         return fn
     
-    @staticmethod
-    def build_feats():
+    def build_feats(self):
         '''
             script to reproduce Zach's walk-thru;
             this build loss_func inserted into `Learner`
