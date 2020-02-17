@@ -86,7 +86,7 @@ class StyleImport:
 
         style_im = dl.one_batch()[0]
         
-        im_feats = feats(style_im)
+        im_feats = self.feats(style_im)
         
         def gram(x:Tensor):
             "Transpose a tensor based on c,w,h"
