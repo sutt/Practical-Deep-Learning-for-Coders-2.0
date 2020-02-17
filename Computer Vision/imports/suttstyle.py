@@ -4,8 +4,9 @@ from torchvision.models import vgg19, vgg16
 import subprocess
 
 class StyleImport:
+    
     def __init__(self):
-        pass
+        self.feats = None
 
     @staticmethod
     def pull_style_target(url, fn=None):
@@ -33,11 +34,11 @@ class StyleImport:
         
         return fn
     
-    @staticmethod:
-    def build_model():
+    @staticmethod
+    def build_feats():
         '''
             script to reproduce Zach's walk-thru;
-            return custom model type instatiated in one function
+            this build loss_func inserted into `Learner`
 
             question: does this stop
         '''
@@ -62,10 +63,20 @@ class StyleImport:
             def _inner(x):
                 feat_net(x)
                 return hooks.stored
-        return _inner
+            return _inner
 
         feats = get_feats('vgg19')
 
+        self.feats = feats
+
+        return feats
+
+    def build_loss_func(self):
+
+        if self.feats is None
+            print('call build_feats() to populate the feats field, then try again')
+            return
+        
         def style_loss(inp:Tensor, out_feat:Tensor):
             "Calculate style loss, assumes we have `im_grams`"
             # Get batch size
@@ -108,6 +119,13 @@ class StyleImport:
                 self.metrics['style'].append(style_loss)
                 self.metrics['content'].append(act_loss)
 
+        loss_func = FeatureLoss(self.feats, style_loss, act_loss)
+
+        return loss_func
+
+    @staticmethod
+    def build_arch():
+        
         class ReflectionLayer(Module):
             "A series of Reflection Padding followed by a ConvLayer"
             def __init__(self, in_channels, out_channels, ks=3, stride=2):
