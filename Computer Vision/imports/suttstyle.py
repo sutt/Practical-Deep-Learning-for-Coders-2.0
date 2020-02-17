@@ -73,7 +73,7 @@ class StyleImport:
 
     def build_loss_func(self):
 
-        if self.feats is None
+        if self.feats is None:
             print('call build_feats() to populate the feats field, then try again')
             return
         
@@ -125,7 +125,7 @@ class StyleImport:
 
     @staticmethod
     def build_arch():
-        
+
         class ReflectionLayer(Module):
             "A series of Reflection Padding followed by a ConvLayer"
             def __init__(self, in_channels, out_channels, ks=3, stride=2):
