@@ -76,7 +76,7 @@ class StyleImport:
             print('call build_feats() to populate the feats field, then try again')
             return
 
-        dset = Datasets(fn, tfms=[PILImage.create])
+        dset = Datasets(style_fn, tfms=[PILImage.create])
         
         dl = dset.dataloaders(after_item=[ToTensor()], 
                               after_batch=[ IntToFloatTensor(), 
