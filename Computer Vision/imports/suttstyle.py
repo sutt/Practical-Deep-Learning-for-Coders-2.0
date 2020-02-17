@@ -70,11 +70,33 @@ class StyleImport:
 
         return feats
 
-    def build_loss_func(self):
+    def build_loss_func(self, style_fn):
 
         if self.feats is None:
             print('call build_feats() to populate the feats field, then try again')
             return
+
+        dset = Datasets(fn, tfms=[PILImage.create])
+        
+        dl = dset.dataloaders(after_item=[ToTensor()], 
+                              after_batch=[ IntToFloatTensor(), 
+                                           Normalize.from_stats(*imagenet_stats)
+                                           ],
+                                           bs=1)
+
+        style_im = dl.one_batch()[0]
+        
+        im_feats = feats(style_im)
+        
+        def gram(x:Tensor):
+            "Transpose a tensor based on c,w,h"
+            n, c, h, w = x.shape
+            x = x.view(n, c, -1)
+            return (x @ x.transpose(1, 2))/(c*w*h)
+        
+        im_grams = [gram(f) for f in im_feats]
+        
+        def get_stl_fs(fs): return fs[:-1]
         
         def style_loss(inp:Tensor, out_feat:Tensor):
             "Calculate style loss, assumes we have `im_grams`"
