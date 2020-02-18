@@ -22,6 +22,7 @@ class StyleImport:
                 if fn in style_fns:
                     continue
                 print(f'saving to file: {fn}')
+                break
 
         try:
             ret = subprocess.check_output(['wget', url, '-O', fn ])
