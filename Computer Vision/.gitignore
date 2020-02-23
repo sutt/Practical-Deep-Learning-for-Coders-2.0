@@ -1,0 +1,5 @@
+imgs/
+**__pycache__**
+models/
+**.ipynb_checkpoints
+**myLib
